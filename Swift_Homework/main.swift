@@ -56,8 +56,8 @@ var newArray = filterArr(array: arr)
 
 
 //5. * Написать функцию, которая добавляет в массив новое число Фибоначчи, и добавить при помощи нее 100 элементов.
-func numberFibonachi(array: [Double]) -> [Double] {
-    var newArray: [Double] = []
+func numberFibonachi(array: [Decimal]) -> [Decimal] {
+    var newArray: [Decimal] = []
     
     if array.count > 1 {
         newArray = array
@@ -73,7 +73,7 @@ func numberFibonachi(array: [Double]) -> [Double] {
     return newArray
 }
 
-var arrFibonachi: [Double] = []
+var arrFibonachi: [Decimal] = []
 var count = 100
 
 repeat {
