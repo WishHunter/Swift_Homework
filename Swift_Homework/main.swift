@@ -15,7 +15,7 @@ func checkEven(_ number: Int) -> Bool {
     return (number % 2) == 0 ? true : false
 }
 
-print(checkEven(number) ? "Число \(number) четное" : "Число \(number) не четное")
+//print(checkEven(number) ? "Число \(number) четное" : "Число \(number) не четное")
 
 
 // 2. Написать функцию, которая определяет, делится ли число без остатка на 3.
@@ -25,7 +25,7 @@ func multiplicity(number: Int, divider: Int) -> (Bool, Int) {
 
 let multiplicityResult = multiplicity(number: number, divider: divider)
 
-print(multiplicityResult.0 ? "Число \(number) делится на \(divider) без остатка" : "Число \(number) не делится на \(divider) без остатка, остаток от деления \(multiplicityResult.1)")
+//print(multiplicityResult.0 ? "Число \(number) делится на \(divider) без остатка" : "Число \(number) не делится на \(divider) без остатка, остаток от деления \(multiplicityResult.1)")
 
 
 // 3. Создать возрастающий массив из 100 чисел.
@@ -56,8 +56,8 @@ var newArray = filterArr(array: arr)
 
 
 //5. * Написать функцию, которая добавляет в массив новое число Фибоначчи, и добавить при помощи нее 100 элементов.
-func numberFibonachi(array: [UInt]) -> [UInt] {
-    var newArray: [UInt] = []
+func numberFibonachi(array: [Double]) -> [Double] {
+    var newArray: [Double] = []
     
     if array.count > 1 {
         newArray = array
@@ -73,15 +73,45 @@ func numberFibonachi(array: [UInt]) -> [UInt] {
     return newArray
 }
 
-var arrFibonachi: [UInt] = []
-var count = 90
+var arrFibonachi: [Double] = []
+var count = 100
 
 repeat {
     arrFibonachi = numberFibonachi(array: arrFibonachi)
     count -= 1
 } while count >= 0
 
-print(arrFibonachi)
+//print(arrFibonachi)
 
 // 6. * Заполнить массив из 100 элементов различными простыми числами. Натуральное число, большее единицы, называется простым, если оно делится только на себя и на единицу. Для нахождения всех простых чисел не больше заданного числа n, следуя методу Эратосфена, нужно выполнить следующие шаги:
 
+func eratosfen(count: Int) -> [Int] {
+    var arr: [Int] = []
+    
+    for i in 2...count {
+        arr.append(i)
+    }
+    
+    var newArr = arr
+    var indexPowNumber: Int = 0
+    
+    var powNumber, startNumber: Int
+
+    repeat {
+        powNumber = newArr[indexPowNumber]
+        startNumber = Int(pow(Double(powNumber), 2))
+        
+        for index in stride(from: startNumber, to: arr.count + powNumber, by: powNumber) {
+            if newArr.firstIndex(of: index) != nil {
+                newArr.remove(at: newArr.firstIndex(of: index)!)
+            }
+        }
+        
+        indexPowNumber += 1
+        
+    } while startNumber < arr.count
+
+    return newArr
+}
+
+//print(eratosfen(count: 545))
