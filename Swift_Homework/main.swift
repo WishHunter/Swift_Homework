@@ -12,7 +12,7 @@ let divider = 3
 
 // 1. Написать функцию, которая определяет, четное число или нет.
 func checkEven(_ number: Int) -> Bool {
-    return (number % 2) == 0 ? true : false
+    return (number % 2) == 0
 }
 
 //print(checkEven(number) ? "Число \(number) четное" : "Число \(number) не четное")
@@ -46,7 +46,7 @@ func filterArr(array: [Int]) -> [Int] {
     var newArray: [Int] = []
     
     for number in array {
-        if (!checkEven(number) && !(multiplicity(number: number, divider: 3)).0) {
+        if (!checkEven(number) && (multiplicity(number: number, divider: 3)).0) {
             newArray.append(number)
         }
     }
@@ -81,7 +81,7 @@ repeat {
     count -= 1
 } while count >= 0
 
-//print(arrFibonachi)
+print(arrFibonachi.count)
 
 // 6. * Заполнить массив из 100 элементов различными простыми числами. Натуральное число, большее единицы, называется простым, если оно делится только на себя и на единицу. Для нахождения всех простых чисел не больше заданного числа n, следуя методу Эратосфена, нужно выполнить следующие шаги:
 
