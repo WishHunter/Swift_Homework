@@ -31,7 +31,7 @@ enum Engine: String {
     case start, stop
 }
 
-protocol Car {
+protocol Car: class {
     var model: String {get}
     var year: Int {get}
     var transmission: Transmission {get}
@@ -48,7 +48,7 @@ protocol Car {
 
 extension Car {
     
-    mutating func changeDoor(_ changeDoor: Door) {
+    func changeDoor(_ changeDoor: Door) {
         switch changeDoor {
             case .close:
                 if doors == .open {
@@ -61,7 +61,7 @@ extension Car {
         }
     }
     
-    mutating func changeEngine(_ changeEngine: Engine) {
+    func changeEngine(_ changeEngine: Engine) {
         switch changeEngine {
             case .stop:
                 if engine == .start {
@@ -76,6 +76,7 @@ extension Car {
 }
 
 class SportCar: Car {
+
     enum Brand {
         case Ferrary, Porsche, BMW, Nissan, AlfaRomeo, AstonMartin
     }
@@ -145,12 +146,9 @@ class SportCar: Car {
             }
         }
     }
-    
-    func changeEngine(_ changeEngine: Engine) {}
-    func changeDoor(_ changeDoor: Door) {}
 }
 
-class TruckCur: Car {    
+class TruckCar: Car {
     enum Brand {
         case BAW, MAN, Volvo, MersedesBenz
     }
@@ -211,14 +209,27 @@ class TruckCur: Car {
             currentLoad -= weight
         }
     }
-    
-    func changeEngine(_ changeEngine: Engine) {}
-    func changeDoor(_ changeDoor: Door) {}
 }
 
-var acros = TruckCur(brand: .MersedesBenz, model: "Arocs", year: 2020, transmission: .automatic, capacity: 44000)
+extension SportCar: CustomStringConvertible {
+    var description: String {
+        return "Car \(brand) \(model) \n" +
+                "============================"
+    }
+}
+
+extension TruckCar: CustomStringConvertible {
+    var description: String {
+        return "Car \(brand) \(model) \n" +
+                "============================"
+    }
+}
+
+var acros = TruckCar(brand: .MersedesBenz, model: "Arocs", year: 2020, transmission: .automatic, capacity: 44000)
 var carrera = SportCar(brand: .Porsche, model: "Carrera 4 GTS", year: 2017, transmission: .CVT, maxSpeed: 306, bodyType: .convertible)
 
+print(carrera)
+print(acros)
 
 acros.load(action: .load, weight: 32500)
 carrera.changeEngine(.start)
@@ -226,12 +237,12 @@ carrera.changeEngine(.start)
 carrera.checkCar()
 
 //Изменения скорости удаленно не предусмотренно в программе, данное действие выполнено исключительно для проверки системы предупреждений
-//carrera.currentSpeed = 95
+carrera.currentSpeed = 95
 
-//acros.checkCar()
-//carrera.checkCar()
+acros.checkCar()
+carrera.checkCar()
 
 //Изменения скорости удаленно не предусмотренно в программе, данное действие выполнено исключительно для проверки системы предупреждений
-//carrera.currentSpeed = carrera.maxSpeed + 50
+carrera.currentSpeed = carrera.maxSpeed + 50
 
 //carrera.checkCar()
