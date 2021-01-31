@@ -7,79 +7,75 @@
 
 import Foundation
 
-class Car {
-    enum Door {
-        case open, close
-    }
+enum Door {
+    case open, close
+}
+
+enum Windows {
+    case open, close
+}
+
+enum Transmission {
+    case manual, automatic, CVT, semiAutomatic
+}
+
+enum Doing {
+    case openDoor, closeDoor, openWindows, closeWindows
+}
+
+enum Brand {
+    case any
+}
+
+enum Engine: String {
+    case start, stop
+}
+
+protocol Car {
+    var model: String {get}
+    var year: Int {get}
+    var transmission: Transmission {get}
+    var doors: Door {get set}
+    var windows: Windows {get set}
+    var engine: Engine {get set}
     
-    enum Windows {
-        case open, close
-    }
+    func checkCar()
     
-    enum Transmission {
-        case manual, automatic, CVT, semiAutomatic
-    }
+    func changeDoor(_ changeDoor: Door)
     
-    enum Doing {
-        case openDoor, closeDoor, openWindows, closeWindows
-    }
+    func changeEngine(_ changeEngine: Engine)
+}
+
+extension Car {
     
-    enum Brand {
-        case any
-    }
-    
-    enum Engine: String {
-        case start, stop
-    }
-    
-    var model: String
-    var year: Int
-    var transmission: Transmission
-    var doors: Door = .close
-    var windows: Windows = .close
-    var engine: Engine = .stop
-    
-    init( model: String, year: Int, transmission: Transmission) {
-        self.model = model
-        self.year = year
-        self.transmission = transmission
-    }
-    
-    func checkCar() {
-        print("Engine \(engine)")
-        print("Doors \(doors)")
-        print("Windows \(windows)")
-    }
-    
-    func changeDoor(_ changeDoor: Door) {
+    mutating func changeDoor(_ changeDoor: Door) {
         switch changeDoor {
-        case .close:
-            if doors == .open {
-                doors = .close
-            }
-        case .open:
-            if doors == .close {
-                doors = .open
-            }
+            case .close:
+                if doors == .open {
+                    doors = .close
+                }
+            case .open:
+                if doors == .close {
+                    doors = .open
+                }
         }
     }
     
-    func changeEngine(_ changeEngine: Engine) {
+    mutating func changeEngine(_ changeEngine: Engine) {
         switch changeEngine {
-        case .stop:
-            if engine == .start {
-                engine = .stop
-            }
-        case .start:
-            if engine == .stop {
-                engine = .start
-            }
+            case .stop:
+                if engine == .start {
+                    engine = .stop
+                }
+            case .start:
+                if engine == .stop {
+                    engine = .start
+                }
         }
     }
 }
 
 class SportCar: Car {
-    
     enum Brand {
         case Ferrary, Porsche, BMW, Nissan, AlfaRomeo, AstonMartin
     }
@@ -88,9 +84,16 @@ class SportCar: Car {
         case sedan, coupe, convertible
     }
     
+    var model: String
+    var year: Int
+    var doors: Door
+    var windows: Windows
+    var engine: Engine
+    var transmission: Transmission
     var brand: Brand
     var maxSpeed: Int
     var bodyType: BodyType
+    
     var currentSpeed: Int {
         didSet {
             if (currentSpeed > maxSpeed) {
@@ -112,12 +115,20 @@ class SportCar: Car {
         self.maxSpeed = maxSpeed
         self.bodyType = bodyType
         self.currentSpeed = 0
-        super.init(model: model, year: year, transmission: transmission)
+        self.model = model
+        self.year = year
+        self.transmission = transmission
+        
+        doors = .close
+        windows = .close
+        engine = .stop
     }
     
-    override func checkCar() {
+    func checkCar() {
         print("Car \(brand) \(model)")
-        super.checkCar()
+        print("Engine \(engine)")
+        print("Doors \(doors)")
+        print("Windows \(windows)")
         print("Current Speed \(currentSpeed) km/h")
         print("===============================")
     }
@@ -134,18 +145,25 @@ class SportCar: Car {
             }
         }
     }
+    
+    func changeEngine(_ changeEngine: Engine) {}
+    func changeDoor(_ changeDoor: Door) {}
 }
 
-class TruckCur: Car {
-    
+class TruckCur: Car {    
     enum Brand {
         case BAW, MAN, Volvo, MersedesBenz
     }
-    
     enum ActionLoad {
         case load, unload
     }
     
+    var engine: Engine
+    var windows: Windows
+    var doors: Door
+    var model: String
+    var year: Int
+    var transmission: Transmission
     var brand: Brand
     var capacity: Int
     var currentLoad: Int {
@@ -166,12 +184,20 @@ class TruckCur: Car {
         self.brand = brand
         self.capacity = capacity
         self.currentLoad = 0
-        super.init(model: model, year: year, transmission: transmission)
+        self.model = model
+        self.year = year
+        self.transmission = transmission
+        
+        doors = .close
+        windows = .close
+        engine = .stop
     }
     
-    override func checkCar() {
+    func checkCar() {
         print("Car \(brand) \(model)")
-        super.checkCar()
+        print("Engine \(engine)")
+        print("Doors \(doors)")
+        print("Windows \(windows)")
         print("Current Load \(currentLoad) kg")
         print("===============================")
     }
@@ -185,6 +211,9 @@ class TruckCur: Car {
             currentLoad -= weight
         }
     }
+    
+    func changeEngine(_ changeEngine: Engine) {}
+    func changeDoor(_ changeDoor: Door) {}
 }
 
 var acros = TruckCur(brand: .MersedesBenz, model: "Arocs", year: 2020, transmission: .automatic, capacity: 44000)
@@ -194,13 +223,15 @@ var carrera = SportCar(brand: .Porsche, model: "Carrera 4 GTS", year: 2017, tran
 acros.load(action: .load, weight: 32500)
 carrera.changeEngine(.start)
 
-//Изменения скорости удаленно не предусмотренно в программе, данное действие выполнено исключительно для проверки системы предупреждений
-carrera.currentSpeed = 95
-
-acros.checkCar()
 carrera.checkCar()
 
 //Изменения скорости удаленно не предусмотренно в программе, данное действие выполнено исключительно для проверки системы предупреждений
-carrera.currentSpeed = carrera.maxSpeed + 50
+//carrera.currentSpeed = 95
 
-carrera.checkCar()
+//acros.checkCar()
+//carrera.checkCar()
+
+//Изменения скорости удаленно не предусмотренно в программе, данное действие выполнено исключительно для проверки системы предупреждений
+//carrera.currentSpeed = carrera.maxSpeed + 50
+
+//carrera.checkCar()
