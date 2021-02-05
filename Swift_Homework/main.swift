@@ -109,7 +109,10 @@ struct Queue<T> {
         queueArray.append(elem)
     }
     
-    mutating func pop() -> T {
+    mutating func pop() -> T? {
+        guard queueArray.count > 0 else {
+            return nil
+        }
         return queueArray.removeFirst()
     }
 }
@@ -165,8 +168,7 @@ func checkEmptyGasoline() {
     }
 }
 
-let customDelete: (Transport) -> Bool = {$0.decommissioned}
-let newQueue = queueTransports.deleteDecommissioned(customDelete: customDelete)
+let newQueue = queueTransports.deleteDecommissioned(customDelete: {$0.decommissioned})
 print(newQueue)
 
 checkEmptyGasoline()
